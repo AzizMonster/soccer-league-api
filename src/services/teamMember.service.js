@@ -4,6 +4,17 @@ class TeamMemberService {
   // Add a new team member
   async addTeamMember(data) {
     try {
+      // Check if team member already exists
+      const existingTeamMember = await prisma.teamMember.findFirst({
+        where: {
+          teamId: data.teamId,
+          memberId: data.memberId,
+        },
+      });
+
+      if (existingTeamMember) {
+        throw new Error("This member is already part of the team");
+      }
       // Check current number of members in the team
       const teamMemberCount = await prisma.teamMember.count({
         where: { teamId: data.teamId },
