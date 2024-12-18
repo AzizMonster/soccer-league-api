@@ -39,24 +39,24 @@ enum ReservationStatus {
 
 // User Model
 model User {
-  id             String         @id @default(uuid())
-  name           String
-  email          String         @unique
-  password       String
-  role           Role           @default(PLAYER)
-  eloPoints      Int            @default(0)
-  eloLevel       EloLevel       @default(BRONZE)
-  reviewCount    Int            @default(0)
-  averageRating  Float?         @default(0.0)
-  notifications  Notification[] @relation("notifications")
-  reviewsWritten Review[]       @relation("reviews_written")
-  reviewsReceived Review[]      @relation("reviews_received")
-  reservations   Reservation[]  @relation("reservations")
-  teamsCaptain   Team[]         @relation("captain")
-  createdAt      DateTime       @default(now()) 
+  id              String         @id @default(uuid())
+  name            String
+  email           String         @unique
+  password        String
+  role            Role           @default(PLAYER)
+  eloPoints       Int            @default(0)
+  eloLevel        EloLevel       @default(BRONZE)
+  reviewCount     Int            @default(0)
+  averageRating   Float?         @default(0.0)
+  notifications   Notification[] @relation("notifications")
+  reviewsWritten  Review[]       @relation("reviews_written")
+  reviewsReceived Review[]       @relation("reviews_received")
+  reservations    Reservation[]  @relation("reservations")
+  teamsCaptain    Team[]         @relation("captain")
+  createdAt       DateTime       @default(now())
 
   TeamMember TeamMember[]
-  Stadium Stadium[]
+  Stadium    Stadium[]
 }
 
 // Review Model
@@ -73,33 +73,31 @@ model Review {
 
 // Notification Model
 model Notification {
-  id         String   @id @default(uuid())
+  id          String   @id @default(uuid())
   recipientId String
-  message    String
-  isRead     Boolean  @default(false)
-  sentAt     DateTime @default(now())
-  user       User     @relation("notifications", fields: [recipientId], references: [id])
+  message     String
+  isRead      Boolean  @default(false)
+  sentAt      DateTime @default(now())
+  user        User     @relation("notifications", fields: [recipientId], references: [id])
 }
 
 // Team Model with TeamMember Relationship
 model Team {
-  id            String        @id @default(uuid())
-  name          String
-  tournamentId  String?
-  captainId     String
-  members       TeamMember[]  @relation("team_members")
-  score         Int           @default(0)
-  tournament    Tournament?   @relation(fields: [tournamentId], references: [id])
-  captain       User          @relation("captain", fields: [captainId], references: [id])
+  id           String       @id @default(uuid())
+  name         String
+  tournamentId String?
+  captainId    String
+  members      TeamMember[] @relation("team_members")
+  score        Int          @default(0)
+  captain      User         @relation("captain", fields: [captainId], references: [id])
 
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  TeamMember TeamMember[]
-
-  Tournament Tournament[] @relation("tournament_teams")
-  matchesAsTeamA   Match[]         @relation("match_team_a") // Matches where the team is `teamA`
-  matchesAsTeamB   Match[]         @relation("match_team_b") // Matches where the team is `teamB`
+  TeamMember     TeamMember[]
+  matchesAsTeamA Match[]      @relation("match_team_a") // Matches where the team is `teamA`
+  matchesAsTeamB Match[]      @relation("match_team_b") // Matches where the team is `teamB`
+  Tournament     Tournament[]
 }
 
 // TeamMember (Join Table)
@@ -110,44 +108,40 @@ model TeamMember {
   team     Team   @relation(fields: [teamId], references: [id])
   member   User   @relation(fields: [memberId], references: [id])
 
-
   Team Team[] @relation("team_members")
 }
 
 // Match Model
 model Match {
-  id           String      @id @default(uuid())
+  id           String       @id @default(uuid())
   tournamentId String?
   teamAId      String
   teamBId      String
   stadiumId    String
   matchDate    DateTime
-  scoreTeamA   Int         @default(0) // Default scores
-  scoreTeamB   Int         @default(0)
-  status       MatchStatus @default(PENDING)
-  createdAt    DateTime    @default(now())
-  udatedAt    DateTime    @updatedAt
-
-   tournament   Tournament? @relation(fields: [tournamentId], references: [id])
-  teamA        Team       @relation("match_team_a", fields: [teamAId], references: [id])
-  teamB        Team       @relation("match_team_b", fields: [teamBId], references: [id])
-  stadium      Stadium    @relation(fields: [stadiumId], references: [id])
+  scoreTeamA   Int          @default(0) // Default scores
+  scoreTeamB   Int          @default(0)
+  status       MatchStatus  @default(PENDING)
+  createdAt    DateTime     @default(now())
+  udatedAt     DateTime     @updatedAt
+  teamA        Team         @relation("match_team_a", fields: [teamAId], references: [id])
+  teamB        Team         @relation("match_team_b", fields: [teamBId], references: [id])
+  stadium      Stadium      @relation(fields: [stadiumId], references: [id])
+  Tournament   Tournament[]
 }
 
 // Stadium Model
 model Stadium {
-  id           String         @id @default(uuid())
+  id           String        @id @default(uuid())
   name         String
   location     String
   capacity     Int
   imagePath    String
   pricePerHour Float
   ownerId      String
-  owner        User         @relation(fields: [ownerId], references: [id])
-  reservations Reservation[]  @relation("stadium_reservations")
-  tournaments  Tournament[]   @relation("stadium_tournaments")
-
-  Reservation Reservation[]
+  owner        User          @relation(fields: [ownerId], references: [id])
+  reservations Reservation[] @relation("stadium_reservations")
+  Reservation  Reservation[]
 
   Tournament Tournament[]
 
@@ -156,35 +150,33 @@ model Stadium {
 
 // Reservation Model
 model Reservation {
-  id          String            @id @default(uuid())
-  stadiumId   String
-  playerId    String
-  startTime   DateTime          
-  endTime     DateTime
-  status      ReservationStatus @default(PENDING)
-  stadium     Stadium           @relation(fields: [stadiumId], references: [id])
-  user        User              @relation("reservations", fields: [playerId], references: [id])
+  id        String            @id @default(uuid())
+  stadiumId String
+  playerId  String
+  startTime DateTime
+  endTime   DateTime
+  status    ReservationStatus @default(PENDING)
+  stadium   Stadium           @relation(fields: [stadiumId], references: [id])
+  user      User              @relation("reservations", fields: [playerId], references: [id])
 
   Stadium Stadium[] @relation("stadium_reservations")
 }
 
 // Tournament Model
 model Tournament {
-  id          String         @id @default(uuid())
+  id          String   @id @default(uuid())
   name        String
   description String
   stadiumId   String
+  matchId     String
   ownerId     String
   startDate   DateTime
   endDate     DateTime
   status      String
   prizePool   Float?
-  stadium     Stadium        @relation(fields: [stadiumId], references: [id])
-  teams       Team[]         @relation("tournament_teams")
+  match       Match    @relation(fields: [matchId], references: [id])
+  stadium     Stadium  @relation(fields: [stadiumId], references: [id])
 
-  Stadium Stadium[] @relation("stadium_tournaments")
-
-  Team Team[]
-
-  Match Match[]
+  Team   Team?   @relation(fields: [teamId], references: [id])
+  teamId String?
 }
