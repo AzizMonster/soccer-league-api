@@ -1,0 +1,14 @@
+name,email,role
+John Doe,john.doe@example.com,PLAYER
+Jane Smith,jane.smith@example.com,PLAYER
+Michael Johnson,michael.johnson@example.com,PLAYER
+Emily Davis,emily.davis@example.com,PLAYER
+Chris Brown,chris.brown@example.com,PLAYER
+Amanda Wilson,amanda.wilson@example.com,PLAYER
+David Martinez,david.martinez@example.com,PLAYER
+Sarah Taylor,sarah.taylor@example.com,PLAYER
+Robert Anderson,robert.anderson@example.com,PLAYER
+Laura Thomas,laura.thomas@example.com,PLAYER
+Kevin White,kevin.white@example.com,PLAYER
+Emma Harris,emma.harris@example.com,PLAYER
+Admin User,admin.user@example.com,ADMIN
