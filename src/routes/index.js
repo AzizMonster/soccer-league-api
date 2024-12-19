@@ -8,6 +8,7 @@ const matchRoutes = require("./match.routes");
 const teamRoutes = require("./team.routes");
 const teamMembersRoutes = require("./teamMember.routes");
 const reviewRoutes = require("./review.routes");
+const touranmentRouter = require("./tournament.routes");
 
 router.use("/users", userRoutes);
 router.use("/auth", authRoutes);
@@ -17,5 +18,6 @@ router.use("/matches", matchRoutes);
 router.use("/teams", teamRoutes);
 router.use("/teamMembers", teamMembersRoutes);
 router.use("/reviews", reviewRoutes);
+router.use("/tournaments", touranmentRouter);
 
 module.exports = router;

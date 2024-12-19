@@ -174,7 +174,7 @@ model Tournament {
   name        String
   description String
   stadiumId   String
-  ownerId     String
+  ownerId     String       
   startDate   DateTime
   endDate     DateTime
   status      String
@@ -186,5 +186,5 @@ model Tournament {
 
   Team Team[]
 
-  Match Match[]
+  Match Match[]        
 }
