@@ -12,7 +12,7 @@ const touranmentRouter = require("./tournament.routes");
 
 router.use("/users", userRoutes);
 router.use("/auth", authRoutes);
-router.use("/reservations", reservationRoutes); 
+router.use("/reservations", reservationRoutes);
 router.use("/stadiums", stadiumRoutes);
 router.use("/matches", matchRoutes);
 router.use("/teams", teamRoutes);

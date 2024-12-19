@@ -2,20 +2,17 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 // Database Source
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 // Enums for Roles, Elo Levels, and Statuses
 enum Role {
   PLAYER
   ADMIN
   SUPERADMIN
 }
-
 enum EloLevel {
   BRONZE
   SILVER
@@ -24,19 +21,16 @@ enum EloLevel {
   DIAMOND
   LEGENDARY
 }
-
 enum MatchStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
 }
-
 enum ReservationStatus {
   PENDING
   CONFIRMED
   CANCELED
 }
-
 // User Model
 model User {
   id             String         @id @default(uuid())
@@ -54,11 +48,9 @@ model User {
   reservations   Reservation[]  @relation("reservations")
   teamsCaptain   Team[]         @relation("captain")
   createdAt      DateTime       @default(now()) 
-
   TeamMember TeamMember[]
   Stadium Stadium[]
 }
-
 // Review Model
 model Review {
   id         String   @id @default(uuid())
@@ -70,7 +62,6 @@ model Review {
   player     User     @relation("reviews_received", fields: [playerId], references: [id])
   createdAt  DateTime @default(now())
 }
-
 // Notification Model
 model Notification {
   id         String   @id @default(uuid())
@@ -80,7 +71,6 @@ model Notification {
   sentAt     DateTime @default(now())
   user       User     @relation("notifications", fields: [recipientId], references: [id])
 }
-
 // Team Model with TeamMember Relationship
 model Team {
   id            String        @id @default(uuid())
@@ -91,17 +81,13 @@ model Team {
   score         Int           @default(0)
   tournament    Tournament?   @relation(fields: [tournamentId], references: [id])
   captain       User          @relation("captain", fields: [captainId], references: [id])
-
   createdAt    DateTime        @default(now())
   updatedAt    DateTime        @updatedAt
-
   TeamMember TeamMember[]
-
   Tournament Tournament[] @relation("tournament_teams")
   matchesAsTeamA   Match[]         @relation("match_team_a") // Matches where the team is `teamA`
   matchesAsTeamB   Match[]         @relation("match_team_b") // Matches where the team is `teamB`
 }
-
 // TeamMember (Join Table)
 model TeamMember {
   id       String @id @default(uuid())
@@ -109,11 +95,8 @@ model TeamMember {
   memberId String @unique
   team     Team   @relation(fields: [teamId], references: [id])
   member   User   @relation(fields: [memberId], references: [id])
-
-
   Team Team[] @relation("team_members")
 }
-
 // Match Model
 model Match {
   id           String      @id @default(uuid())
@@ -127,13 +110,11 @@ model Match {
   status       MatchStatus @default(PENDING)
   createdAt    DateTime    @default(now())
   udatedAt    DateTime    @updatedAt
-
    tournament   Tournament? @relation(fields: [tournamentId], references: [id])
   teamA        Team       @relation("match_team_a", fields: [teamAId], references: [id])
   teamB        Team       @relation("match_team_b", fields: [teamBId], references: [id])
   stadium      Stadium    @relation(fields: [stadiumId], references: [id])
 }
-
 // Stadium Model
 model Stadium {
   id           String         @id @default(uuid())
@@ -146,14 +127,10 @@ model Stadium {
   owner        User         @relation(fields: [ownerId], references: [id])
   reservations Reservation[]  @relation("stadium_reservations")
   tournaments  Tournament[]   @relation("stadium_tournaments")
-
   Reservation Reservation[]
-
   Tournament Tournament[]
-
   Match Match[]
 }
-
 // Reservation Model
 model Reservation {
   id          String            @id @default(uuid())
@@ -164,27 +141,22 @@ model Reservation {
   status      ReservationStatus @default(PENDING)
   stadium     Stadium           @relation(fields: [stadiumId], references: [id])
   user        User              @relation("reservations", fields: [playerId], references: [id])
-
   Stadium Stadium[] @relation("stadium_reservations")
 }
-
 // Tournament Model
 model Tournament {
   id          String         @id @default(uuid())
   name        String
   description String
   stadiumId   String
-  ownerId     String       
+  ownerId     String
   startDate   DateTime
   endDate     DateTime
   status      String
   prizePool   Float?
   stadium     Stadium        @relation(fields: [stadiumId], references: [id])
   teams       Team[]         @relation("tournament_teams")
-
   Stadium Stadium[] @relation("stadium_tournaments")
-
   Team Team[]
-
-  Match Match[]        
+  Match Match[]
 }

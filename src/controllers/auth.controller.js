@@ -19,7 +19,12 @@ const registerUser = async (req, res) => {
 
 // Controller method for user login
 const loginUser = async (req, res) => {
+
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
 
   try {
     const { user, token } = await authService.loginUser(email, password);
